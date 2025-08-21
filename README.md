@@ -393,3 +393,41 @@ JWT_SECRET=your_jwt_secret
 ## License
 
 MIT (or your preferred license)
+
+## Running Locally
+
+1. Install dependencies
+
+```bash
+npm install
+```
+
+2. Copy `.env.example` to `.env` and fill in values.
+3. Start a MongoDB instance.
+4. Launch the server
+
+```bash
+npm start
+```
+
+## Testing
+
+Use curl commands:
+
+```bash
+# Register
+curl -X POST http://localhost:5000/auth/register \
+  -H "Content-Type: application/json" \
+  -d '{"email":"admin@acme.com","password":"StrongPassword123!","companyName":"Acme Inc"}'
+
+# Login
+TOKEN=$(curl -s -X POST http://localhost:5000/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"email":"admin@acme.com","password":"StrongPassword123!"}' | jq -r .token)
+
+# Generate
+curl -X POST http://localhost:5000/generate \
+  -H "Authorization: Bearer $TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"productModel":"iPhone 15 Pro 256GB","customSchema":{"name":"Product name under 60 chars","brand":"Manufacturer name"}}'
+```
