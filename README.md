@@ -17,7 +17,7 @@ Simple SaaS API that takes **product model numbers** + **custom data schemas** a
 
 ## Tech Stack
 
-- **API:** Node.js + Express
+- **API:** Node.js + Express (TypeScript)
 - **DB:** MongoDB + Mongoose
 - **AI:** Google Gemini (`@google/generative-ai`)
 - **Auth:** JWT (`jsonwebtoken` + `bcryptjs`)
@@ -30,23 +30,23 @@ Simple SaaS API that takes **product model numbers** + **custom data schemas** a
 
 ```
 src/
-├── app.js
+├── app.ts
 ├── config/
-│   └── db.js
+│   └── db.ts
 ├── controllers/
-│   ├── auth.js
-│   └── generate.js
+│   ├── auth.ts
+│   └── generate.ts
 ├── middleware/
-│   ├── auth.js
-│   └── rateLimit.js
+│   ├── auth.ts
+│   └── rateLimit.ts
 ├── models/
-│   ├── Job.js
-│   └── User.js
+│   ├── Job.ts
+│   └── User.ts
 ├── routes/
-│   ├── auth.js
-│   └── generate.js
+│   ├── auth.ts
+│   └── generate.ts
 └── services/
-    └── gemini.js
+    └── gemini.ts
 ```
 
 ---
@@ -360,7 +360,7 @@ JWT_SECRET=your_jwt_secret
 ## Dependencies
 
 ```json
-{
+{ 
   "dependencies": {
     "@google/generative-ai": "^0.1.3",
     "axios": "^1.5.0",
@@ -372,7 +372,14 @@ JWT_SECRET=your_jwt_secret
     "mongoose": "^7.5.0"
   },
   "devDependencies": {
-    "nodemon": "^3.1.0"
+    "nodemon": "^3.1.0",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.0.0",
+    "@types/express": "^4.17.21",
+    "@types/node": "^20.5.0",
+    "@types/jsonwebtoken": "^9.0.2",
+    "@types/bcryptjs": "^2.4.2",
+    "@types/cors": "^2.8.17"
   }
 }
 ```
@@ -384,7 +391,7 @@ JWT_SECRET=your_jwt_secret
 - [ ] Async job queue (BullMQ) + worker
 - [ ] Webhook for job completion
 - [ ] Admin dashboard (usage/credits)
-- [ ] TypeScript typings & validation (Zod)
+- [ ] Input validation (Zod)
 - [ ] Confidence scores + source traces
 - [ ] Multi-tenant billing integration (Stripe)
 
@@ -393,3 +400,41 @@ JWT_SECRET=your_jwt_secret
 ## License
 
 MIT (or your preferred license)
+
+## Running Locally
+
+1. Install dependencies
+
+```bash
+npm install
+```
+
+2. Copy `.env.example` to `.env` and fill in values.
+3. Start a MongoDB instance.
+4. Launch the server
+
+```bash
+npm start
+```
+
+## Testing
+
+Use curl commands:
+
+```bash
+# Register
+curl -X POST http://localhost:5000/auth/register \
+  -H "Content-Type: application/json" \
+  -d '{"email":"admin@acme.com","password":"StrongPassword123!","companyName":"Acme Inc"}'
+
+# Login
+TOKEN=$(curl -s -X POST http://localhost:5000/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"email":"admin@acme.com","password":"StrongPassword123!"}' | jq -r .token)
+
+# Generate
+curl -X POST http://localhost:5000/generate \
+  -H "Authorization: Bearer $TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"productModel":"iPhone 15 Pro 256GB","customSchema":{"name":"Product name under 60 chars","brand":"Manufacturer name"}}'
+```
