@@ -17,7 +17,7 @@ Simple SaaS API that takes **product model numbers** + **custom data schemas** a
 
 ## Tech Stack
 
-- **API:** Node.js + Express
+- **API:** Node.js + Express (TypeScript)
 - **DB:** MongoDB + Mongoose
 - **AI:** Google Gemini (`@google/generative-ai`)
 - **Auth:** JWT (`jsonwebtoken` + `bcryptjs`)
@@ -30,23 +30,23 @@ Simple SaaS API that takes **product model numbers** + **custom data schemas** a
 
 ```
 src/
-├── app.js
+├── app.ts
 ├── config/
-│   └── db.js
+│   └── db.ts
 ├── controllers/
-│   ├── auth.js
-│   └── generate.js
+│   ├── auth.ts
+│   └── generate.ts
 ├── middleware/
-│   ├── auth.js
-│   └── rateLimit.js
+│   ├── auth.ts
+│   └── rateLimit.ts
 ├── models/
-│   ├── Job.js
-│   └── User.js
+│   ├── Job.ts
+│   └── User.ts
 ├── routes/
-│   ├── auth.js
-│   └── generate.js
+│   ├── auth.ts
+│   └── generate.ts
 └── services/
-    └── gemini.js
+    └── gemini.ts
 ```
 
 ---
@@ -360,7 +360,7 @@ JWT_SECRET=your_jwt_secret
 ## Dependencies
 
 ```json
-{
+{ 
   "dependencies": {
     "@google/generative-ai": "^0.1.3",
     "axios": "^1.5.0",
@@ -372,7 +372,14 @@ JWT_SECRET=your_jwt_secret
     "mongoose": "^7.5.0"
   },
   "devDependencies": {
-    "nodemon": "^3.1.0"
+    "nodemon": "^3.1.0",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.0.0",
+    "@types/express": "^4.17.21",
+    "@types/node": "^20.5.0",
+    "@types/jsonwebtoken": "^9.0.2",
+    "@types/bcryptjs": "^2.4.2",
+    "@types/cors": "^2.8.17"
   }
 }
 ```
@@ -384,7 +391,7 @@ JWT_SECRET=your_jwt_secret
 - [ ] Async job queue (BullMQ) + worker
 - [ ] Webhook for job completion
 - [ ] Admin dashboard (usage/credits)
-- [ ] TypeScript typings & validation (Zod)
+- [ ] Input validation (Zod)
 - [ ] Confidence scores + source traces
 - [ ] Multi-tenant billing integration (Stripe)
 
